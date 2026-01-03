@@ -7,7 +7,7 @@ from .serializers import TaskSerializer, UserSerializer
 
 #GET and POST method for Task
 @api_view(['GET','POST'])
-def task_list(request):
+def task_list(request, format=None):
     if request.method == 'GET':
         tasks = TaskModel.objects.all()
         serializer = TaskSerializer(tasks, many=True)
@@ -21,7 +21,7 @@ def task_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET','PUT','DELETE'])
-def tasks_detail(request, pk):
+def tasks_detail(request, pk, format=None):
 
     try:
         tasks = TaskModel.objects.get(pk=pk)
@@ -45,7 +45,7 @@ def tasks_detail(request, pk):
     
 #Get and POST method for USer
 @api_view(['GET','POST'])
-def user_list(request):
+def user_list(request, format=None):
     if request.method == 'GET':
         user = UserModel.objects.all()
         serializer = UserSerializer(user, many=True)
@@ -59,7 +59,7 @@ def user_list(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PUT','DELETE'])
-def users_detail(request, pk):
+def users_detail(request, pk, format=None):
 
     try: 
         user = UserModel.objects.get(pk=pk)

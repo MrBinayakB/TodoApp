@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from mainapp.models import TaskModel
 from mainapp.models import UserModel
 from .serializers import TaskSerializer, UserSerializer
-from .filters import TaskFilter
+from .filters import TaskFilter, UserFilter
 
 #GET and POST method for Task
 @api_view(['GET','POST'])
@@ -54,6 +54,11 @@ def tasks_detail(request, pk, format=None):
 def user_list(request, format=None):
     if request.method == 'GET':
         user = UserModel.objects.all()
+
+        filterset = UserFilter(request.GET, queryset=user)
+        if filterset.is_valid():
+            user = filterset.qs
+
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
 

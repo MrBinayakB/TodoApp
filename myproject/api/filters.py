@@ -5,7 +5,7 @@ class TaskFilter(django_filters.FilterSet):
     id = django_filters.NumberFilter()
     completed = django_filters.BooleanFilter()
     priority = django_filters.NumberFilter()
-    groupby = django_filters.CharFilter(lookup_expr='iexact')
+    groupby = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = TaskModel
@@ -13,7 +13,7 @@ class TaskFilter(django_filters.FilterSet):
 
 class UserFilter(django_filters.FilterSet):
     id = django_filters.NumberFilter()
-    name = django_filters.CharFilter(lookup_expr='iexact')
+    name = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = UserModel

@@ -5,6 +5,7 @@ from mainapp.models import TaskModel
 from mainapp.models import UserModel
 from .serializers import TaskSerializer, UserSerializer
 from .filters import TaskFilter, UserFilter
+from django.db.models import Q
 
 #GET and POST method for Task
 @api_view(['GET','POST'])
@@ -15,6 +16,10 @@ def task_list(request, format=None):
         filterset = TaskFilter(request.GET, queryset=tasks)
         if filterset.is_valid():
             tasks = filterset.qs
+        
+        search = request.GET.get('search')
+        if search:
+            tasks = tasks.filter(Q(completed__icontains=search | Q(groupby__icontains=search)))
         
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
@@ -58,7 +63,11 @@ def user_list(request, format=None):
         filterset = UserFilter(request.GET, queryset=user)
         if filterset.is_valid():
             user = filterset.qs
-
+        
+        search = request.GET.get('search')
+        if search:
+            user = user.filter(Q(name__icontains=search) | Q(email__icontains=search))
+        
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
 
